@@ -1,0 +1,266 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #0d0d0d; // Darker background like RuneProfile
+    color: #ddd; // Lighter text for better contrast
+    font-size: 14px;
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.5;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0 0 15px 0;
+    padding: 0;
+    color: #ff981f; // RuneScape gold color
+    font-weight: bold;
+}
+
+p {
+    margin: 0 0 10px 0;
+    padding: 0;
+}
+
+// Container layout similar to RuneProfile
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: transparent;
+}
+
+// Header styling
+.header {
+    background-color: #202020;
+    border-bottom: 1px solid #444;
+    padding: 15px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+// Panel styling similar to RuneProfile
+// Panel styling similar to RuneProfile
+.sidebar, .map {
+    background-color: #262626;
+    position: relative;
+    margin-bottom: 15px;
+    padding: 15px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    border: none; // Remove the border from the main element
+}
+
+// Separate pseudo-elements for different border sizes
+.sidebar::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 60px solid transparent; // Smaller border for sidebar
+    border-image: url(/interface/border.png) 30 30 repeat;
+    border-image-outset: 5px;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.map::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 40px solid transparent; // Larger border for map
+    border-image: url(/interface/border.png) 30 30 repeat;
+    border-image-outset: 5px;
+    pointer-events: none;
+    z-index: 1;
+}
+
+// Add gap between sidebar and map in landscape mode
+@media (orientation: landscape) {
+    .sidebar, .map {
+        height: 600px; // Apply same fixed height to both elements
+        width: calc(50% - 10px); // Equal width distribution with gap
+    }
+    
+    .map {
+        margin-right: 20px; // Add space to the right of the map
+    }
+    
+    .sidebar {
+        overflow-y: auto; // Make sidebar scrollable if content exceeds height
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+button {
+    background-color: oklch(.2 0 0);
+    border: 1px solid oklch(.4 0 0);
+    color: oklch(.77 .23 55);
+    padding: 6px 12px;
+    margin: 0 5px 5px 0;
+    font-size: 13px;
+    cursor: pointer;
+    border-radius: 3px;
+    
+    &:hover {
+        background-color: #444;
+    }
+    
+    &:active {
+        background-color: #333;
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+    }
+}
+
+button.small {
+    padding: 3px 6px;
+    font-size: 12px;
+}
+
+button:disabled {
+    color: #888;
+    border-color: #444;
+    background-color: #2a2a2a;
+    cursor: not-allowed;
+}
+
+input,
+select {
+    color: #fff;
+    background-color: #333;
+    border: 1px solid #555;
+    padding: 6px 10px;
+    margin: 0 0 10px 0;
+    font-size: 13px;
+    border-radius: 3px;
+    
+    &:focus {
+        border-color: #ff981f;
+        outline: none;
+        box-shadow: 0 0 3px rgba(255, 152, 31, 0.5);
+    }
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    margin-bottom: 15px;
+    color: #ddd;
+    background-color: #262626;
+    border: 1px solid #444;
+}
+
+th,
+td {
+    padding: 8px 12px;
+    text-align: left;
+    white-space: nowrap;
+
+    &.right {
+        text-align: right;
+    }
+}
+
+th {
+    color: #ff981f; // RuneScape gold for headers
+    background-color: #333;
+    border-bottom: 1px solid #444;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+tr:not(:last-child) > td {
+    border-bottom: 1px solid #333;
+}
+
+tr:hover > td {
+    background-color: #2a2a2a;
+}
+
+.max td {
+    background-color: rgba(255, 152, 31, 0.1); // Subtle highlight with RuneScape gold
+}
+
+// RuneProfile tab styling
+.tab {
+    background-color: #333;
+    border-bottom: 2px solid #444;
+    
+    &.active {
+        background-color: #444;
+        border-bottom-color: #ff981f;
+    }
+}
+
+// Floor controls styling
+.floor-controls {
+    background-color: #333;
+    border-radius: 3px;
+    padding: 10px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+// Remove the map-container since we're setting fixed dimensions now
+// Or adjust it if you still need it for mobile views:
+@media (max-width: 767px) {
+    .map-container {
+        position: relative;
+        width: 100%;
+        height: 0;
+        padding-bottom: 100%; // For square aspect ratio
+        overflow: hidden;
+    }
+    
+    .map-container > * {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+}
+
+// Add this to your style.scss file
+.scrollable-tab-content {
+    max-height: 400px; // Adjust this height as needed
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 5px; // Add some padding for the scrollbar
+    
+    // Style the scrollbar for webkit browsers (Chrome, Safari, newer Edge)
+    &::-webkit-scrollbar {
+        width: 8px;
+    }
+    
+    &::-webkit-scrollbar-track {
+        background: #262626;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+        background-color: #444;
+        border-radius: 4px;
+    }
+    
+    &::-webkit-scrollbar-thumb:hover {
+        background-color: #555;
+    }
+}
+
+// Optional: Add this if you want to style Firefox scrollbars
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #444 #262626;
+}
