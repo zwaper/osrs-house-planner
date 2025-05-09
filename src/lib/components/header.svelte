@@ -34,7 +34,7 @@
 <style lang="scss">
   .osrs-header {
     background-color: #483e33;
-    background-image: url("/interface/header-bg.png"); /* This will be handled by Vite/SvelteKit */
+    /** background-image: url("/interface/header-bg.png"); /* This will be handled by Vite/SvelteKit */
     background-repeat: repeat;
     border-bottom: 2px solid #5a4a3a;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);

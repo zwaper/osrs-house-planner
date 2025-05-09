@@ -41,7 +41,7 @@
       color: #ece5ce;
       padding: 30px 0 15px;
       margin-top: 40px;
-      background-image: url("/interface/footer-bg.png");
+      /**background-image: url("/interface/footer-bg.png");*/
       background-repeat: repeat;
       
       .footer-container {

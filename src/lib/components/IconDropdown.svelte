@@ -9,6 +9,7 @@
   
   let isOpen = false;
   let dropdownElement: HTMLElement;
+  let focusedItemIndex = -1;
   
   // Positioning variables
   let dropdownHeight: number;
@@ -48,6 +49,43 @@
     }
   }
   
+  // Handle keyboard navigation
+  function handleKeyDown(event: KeyboardEvent) {
+    if (!isOpen) return;
+    
+    switch (event.key) {
+      case 'Escape':
+        isOpen = false;
+        break;
+      case 'ArrowDown':
+        event.preventDefault();
+        focusedItemIndex = Math.min(focusedItemIndex + 1, processedOptions.length);
+        break;
+      case 'ArrowUp':
+        event.preventDefault();
+        focusedItemIndex = Math.max(focusedItemIndex - 1, -1);
+        break;
+      case 'Enter':
+      case ' ':
+        event.preventDefault();
+        if (focusedItemIndex === -1) {
+          handleSelect('');
+        } else {
+          const option = processedOptions[focusedItemIndex];
+          handleSelect(isObjectOption(option) ? option.id : option);
+        }
+        break;
+    }
+  }
+  
+  // Handle item key press
+  function handleItemKeyDown(event: KeyboardEvent, value: string) {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      handleSelect(value);
+    }
+  }
+  
   onMount(() => {
     document.addEventListener('click', handleClickOutside);
     windowHeight = window.innerHeight;
@@ -79,11 +117,13 @@
   }
 </script>
 
-<div class="icon-dropdown" bind:this={dropdownElement} style:width={width}>
+<div class="icon-dropdown" bind:this={dropdownElement} style:width={width} on:keydown={handleKeyDown}>
   <button 
     type="button"
     class="dropdown-toggle" 
     on:click|stopPropagation={() => isOpen = !isOpen}
+    aria-haspopup="listbox"
+    aria-expanded={isOpen}
   >
     <div class="dropdown-text">
       {#if selected && getOptionById(selected)}
@@ -101,19 +141,29 @@
   </button>
   
   {#if isOpen}
-    <div class="dropdown-menu" class:upward={openUpward}>
+    <div class="dropdown-menu" class:upward={openUpward} role="listbox">
       <div 
         class="dropdown-item"
+        class:focused={focusedItemIndex === -1}
         on:click={() => handleSelect('')}
+        on:keydown={(e) => handleItemKeyDown(e, '')}
+        tabindex="0"
+        role="option"
+        aria-selected={!selected}
       >
         <span class="option-name">None</span>
       </div>
       
-      {#each processedOptions as option}
+      {#each processedOptions as option, i}
         <div 
           class="dropdown-item" 
           class:selected={selected === (isObjectOption(option) ? option.id : option)}
+          class:focused={focusedItemIndex === i}
           on:click={() => handleSelect(isObjectOption(option) ? option.id : option)}
+          on:keydown={(e) => handleItemKeyDown(e, isObjectOption(option) ? option.id : option)}
+          tabindex="0"
+          role="option"
+          aria-selected={selected === (isObjectOption(option) ? option.id : option)}
         >
           {#if isObjectOption(option) && option.img}
             <img src={option.img} alt={option.name} class="option-icon" />
@@ -202,8 +252,9 @@
     min-height: 28px;
     box-sizing: border-box;
     
-    &:hover {
+    &:hover, &:focus, &.focused {
       background-color: #504336;
+      outline: none;
     }
     
     &.selected {
