@@ -1,5 +1,11 @@
 import { Door } from './Door';
 import type { Hotspot } from './Hotspot';
+import { base } from '$app/paths';
+
+function withBase(path: string): string {
+	return path.startsWith('/') ? `${base}${path}` : path;
+  }
+
 
 export interface RoomType {
 	/** The key used to identify this room type */
@@ -35,6 +41,14 @@ export interface RoomType {
 				]
 			},
  */
+			function processStringOptions(options: string[]): { id: string; name: string; img: string }[] {
+				return options.map(opt => ({
+				  id: opt,
+				  name: opt.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
+				  img: withBase(`/icons/placeholder.png`) // Use a default icon for string options
+				}));
+			  }
+
 
 export const ROOM_TYPES: RoomType[] = [
 	{ /** Garden */
@@ -48,11 +62,11 @@ export const ROOM_TYPES: RoomType[] = [
 			{
 				name: 'Centrepiece',
 				options: [
-				  { id: 'exit_portal', name: 'Exit Portal', img: '/icons/garden/Exit_portal_icon.png' },
-				  { id: 'decorative_rock', name: 'Decorative Rock', img: '/icons/garden/Decorative_rock_icon.png' },
-				  { id: 'pond', name: 'Pond', img: '/icons/garden/Pond_icon.png' },
-				  { id: 'imp_statue', name: 'Imp Statue', img: '/icons/garden/Imp_statue_icon.png' },
-				  { id: 'dungeon_entrance', name: 'Dungeon Entrance', img: '/icons/garden/Dungeon_entrance_icon.png' }
+				  { id: 'exit_portal', name: 'Exit Portal', img: withBase('/icons/garden/Exit_portal_icon.png') },
+				  { id: 'decorative_rock', name: 'Decorative Rock', img: withBase('/icons/garden/Decorative_rock_icon.png') },
+				  { id: 'pond', name: 'Pond', img: withBase('/icons/garden/Pond_icon.png') },
+				  { id: 'imp_statue', name: 'Imp Statue', img: withBase('/icons/garden/Imp_statue_icon.png') },
+				  { id: 'dungeon_entrance', name: 'Dungeon Entrance', img: withBase('/icons/garden/Dungeon_entrance_icon.png') }
 				]
 			},
 			{
